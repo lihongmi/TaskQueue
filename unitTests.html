@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<script src="socket.io/socket.io.js"></script>
+	</head>
+	<body>
+		Check console for test results:
+		<script>
+			function write(message){
+				var screenConsole=document.getElementById("screenConsole");
+				screenConsole.innerHTML = 
+					screenConsole.innerHTML + "<p>"
+					+ message + "</p>";
+			}
+			var uuid = "";
+			var socket = io('http://localhost:8000');
+			socket.emit('getTaskList');
+			socket.emit('pushTask','echo Testing!');
+			socket.emit('getTaskList');
+			socket.on('queue_tasks',function(data){
+				write(JSON.stringify(data));
+				//assert here
+				write(JSON.stringify(data.queue_tasks[0]));
+			});
+		</script>
+		<div id="screenConsole">
+		</div>
+	</body>
+</html>
